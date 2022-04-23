@@ -23,7 +23,6 @@ const Home = ({ navigation }) => {
     RobotoMedium: require("../../assets/fonts/Roboto-Medium.ttf"),
     RobotoItalic: require("../../assets/fonts/Roboto-Italic.ttf"),
     RobotoLight: require("../../assets/fonts/Roboto-Light.ttf"),
-    RobotoThin: require("../../assets/fonts/Roboto-Thin.ttf"),
   });
   if (!loaded) {
     return null;
