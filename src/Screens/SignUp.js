@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+} from "react-native";
 import styles from "../Styles/SignUpStyles";
 import CustomInput from "../Components/CustomInput";
 import CustomButton from "../Components/CustomButton";
@@ -193,7 +198,11 @@ const SignUp = ({ navigation }) => {
   ];
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior="padding"
+      keyboardVerticalOffset={-120}
+      style={styles.container}
+    >
       <View style={styles.contentContainer}>
         <Text style={styles.title}>Create Your Account!</Text>
         {inputs.map((el, idx) => {
@@ -222,7 +231,7 @@ const SignUp = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

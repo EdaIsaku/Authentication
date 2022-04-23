@@ -1,32 +1,45 @@
 const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
 
+//OAuth2 authentication
+const oAuth2Client = new google.auth.OAuth2(
+  process.env.CLIENT_ID,
+  process.env.CLIENT_SECRET,
+  process.env.REDIRECT_URI
+);
+
+oAuth2Client.setCredentials({
+  refresh_token: process.env.REFRESH_TOKEN,
+});
+
+//email to students with certificate
 const sendEmail = async (email) => {
-  let testAccount = await nodemailer.createTestAccount();
+  try {
+    //transporter object
+    let transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.USER,
+        pass: process.env.PASSWORD,
+      },
+      secure: false,
+    });
 
-  let transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false,
-    auth: {
-      user: testAccount.user, // generated ethereal user
-      pass: testAccount.pass, // generated ethereal password
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-  });
-
-  // send mail with defined transport object
-  let info = await transporter.sendMail({
-    from: "edaisaku0@gmail.com", // sender address
-    to: email, // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>", // html body
-  });
-
-  console.log("Message sent: %s", info.messageId);
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    //details of email
+    let mailOptions = {
+      sender: "QKUM",
+      from: "edaisaku0@gmail.com",
+      to: email,
+      subject: "Reset Password",
+      html: `<h3>Hello !</h3>
+             <br/>
+             <p>Reset password.</p>
+             `,
+    };
+    return await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 module.exports = { sendEmail };
