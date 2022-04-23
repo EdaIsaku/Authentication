@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import styles from "../Styles/SignUpStyles";
 import CustomInput from "../Components/CustomInput";
 import CustomButton from "../Components/CustomButton";
@@ -49,7 +44,7 @@ const SignUp = ({ navigation }) => {
   };
 
   const validateName = (name) => {
-    if (name.length < 3 || stringContainsNumberSymbols(name)) {
+    if (name.length < 3) {
       setIsError((prevState) => ({
         ...prevState,
         name: true,
@@ -58,7 +53,18 @@ const SignUp = ({ navigation }) => {
         ...prevState,
         name: false,
       }));
-      // console.log("Name can't be shorter than 3 characters and can't contain number!");
+      // console.log("Name can't be shorter than 3 characters!");
+      return false;
+    } else if (stringContainsNumberSymbols(name)) {
+      setIsError((prevState) => ({
+        ...prevState,
+        name: true,
+      }));
+      setIsSuccess((prevState) => ({
+        ...prevState,
+        name: false,
+      }));
+      // console.log("Name can't contain numbers or symbols!");
       return false;
     } else {
       setIsSuccess((prevState) => ({
@@ -71,7 +77,7 @@ const SignUp = ({ navigation }) => {
   };
 
   const validatePassword = (password) => {
-    if (password.length < 6 || !stringContainsNumberSymbols(password)) {
+    if (password.length < 6) {
       setIsError((prevState) => ({
         ...prevState,
         password: true,
@@ -82,7 +88,7 @@ const SignUp = ({ navigation }) => {
       }));
       // console.log("Password is too short!");
       return false;
-    } else {
+    } else if (stringContainsNumberSymbols(password)) {
       setIsError((prevState) => ({
         ...prevState,
         password: false,
@@ -158,8 +164,8 @@ const SignUp = ({ navigation }) => {
             navigation.navigate("Result", {
               result: "error",
               msg: "User is already registered!",
-              btnName: "Sign Up",
-              nav: "SignUp",
+              btnName: "Log In",
+              nav: "SignIn",
             });
           }
         });
@@ -187,11 +193,7 @@ const SignUp = ({ navigation }) => {
   ];
 
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      keyboardVerticalOffset={-120}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <View style={styles.contentContainer}>
         <Text style={styles.title}>Create Your Account!</Text>
         {inputs.map((el, idx) => {
@@ -220,7 +222,7 @@ const SignUp = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 

@@ -26,7 +26,12 @@ const SignIn = ({ navigation }) => {
         .then((res) => res.json())
         .then((res) => {
           if (res.msg == "Successfully loged In") {
-            navigation.navigate("Map");
+            navigation.navigate("Result", {
+              result: "success",
+              msg: "You can navigate in APP.",
+              btnName: "Log In",
+              nav: "SignIn",
+            });
           } else if (res.msg == "Password incorrect!") {
             navigation.navigate("Result", {
               result: "error",
@@ -45,7 +50,7 @@ const SignIn = ({ navigation }) => {
         });
     }
   };
-  const handleForgotPassword = () => {
+  const handleForgotPress = () => {
     navigation.navigate("ResetPassword");
   };
   const handleChangeText = (txt, name) => {
@@ -62,6 +67,7 @@ const SignIn = ({ navigation }) => {
       [name]: txt,
     });
   };
+
   const validatePassword = (password) => {
     if (password.length < 6) {
       setIsError((prevState) => ({
@@ -161,7 +167,7 @@ const SignIn = ({ navigation }) => {
           dark={true}
           handleButtonPress={handleButtonPress}
         />
-        <TouchableOpacity onPress={handleForgotPassword}>
+        <TouchableOpacity onPress={handleForgotPress}>
           <Text style={styles.forgotPassword}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>

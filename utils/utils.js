@@ -1,6 +1,5 @@
 const stringContainsNumberSymbols = (str) => {
-  const hasSymbols = /[!@#$%^&*()_+\-=\[\]{};':\\|,.<>\/?]+|\d/.test(str);
-  return hasSymbols;
+  return /[!@#$%^&*()_+\-=\[\]{};':\\|,.<>\/?]+|\d/.test(str);
 };
 
 const fetchRequest = (url, data) => {

@@ -13,6 +13,7 @@ const ResetPassword = ({ navigation }) => {
   const [success, setIsSuccess] = useState({
     email: false,
   });
+
   const [email, setEmail] = useState("");
   const validateEmail = (email) => {
     let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
@@ -64,10 +65,7 @@ const ResetPassword = ({ navigation }) => {
               nav: "ResetPassword",
             });
           } else {
-            //TODO
-            fetchRequest("http://192.168.0.104:3000/sendEmail", { email })
-              .then((res) => res.json())
-              .then((res) => console.log("Result", res));
+            console.log(res);
           }
         });
     } else {
