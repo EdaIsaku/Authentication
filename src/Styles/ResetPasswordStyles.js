@@ -18,5 +18,6 @@ export default StyleSheet.create({
   title: {
     fontSize: sizes.lg,
     paddingBottom: sizes.lg,
+    fontFamily: "RobotoLight",
   },
 });

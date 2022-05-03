@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import CutomInput from "../Components/CustomInput";
 import CustomButton from "../Components/CustomButton";
 import styles from "../Styles/SignInStyles";
 import { stringContainsNumberSymbols, fetchRequest } from "../../utils/utils";
+import { UserStateContext } from "../Context/UserContext";
 
 const SignIn = ({ navigation }) => {
   const [signInData, setSignInData] = useState({
@@ -13,25 +15,38 @@ const SignIn = ({ navigation }) => {
   });
   const [error, setIsError] = useState({
     email: false,
+    emailMsg: "",
     password: false,
+    passwordMsg: "",
   });
   const [success, setIsSuccess] = useState({
     email: false,
     password: false,
   });
+  const [user, setUser] = useContext(UserStateContext);
+
+  const set_UserToken_Email_Name = async (userToken, userEmail, userName) => {
+    try {
+      const jsonUserToken = JSON.stringify(userToken);
+      await AsyncStorage.setItem("AppUserToken", jsonUserToken);
+      await AsyncStorage.setItem("UserEmail", userEmail);
+      await AsyncStorage.setItem("UserName", userName);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleButtonPress = () => {
     if (validateSignInData(signInData)) {
-      fetchRequest("http://192.168.0.104:3000/signIn", signInData)
+      setUser({
+        email: signInData.email,
+      });
+      fetchRequest(`http://192.168.0.104:3000/signIn`, signInData)
         .then((res) => res.json())
         .then((res) => {
           if (res.msg == "Successfully loged In") {
-            navigation.navigate("Result", {
-              result: "success",
-              msg: "You can navigate in APP.",
-              btnName: "Log In",
-              nav: "SignIn",
-            });
+            set_UserToken_Email_Name(res.accessToken, res.email, res.userName);
+            navigation.navigate("Map");
           } else if (res.msg == "Password incorrect!") {
             navigation.navigate("Result", {
               result: "error",
@@ -73,23 +88,30 @@ const SignIn = ({ navigation }) => {
       setIsError((prevState) => ({
         ...prevState,
         password: true,
+        passwordMsg: "Password must be at least 6 characters long",
       }));
       setIsSuccess((prevState) => ({
         ...prevState,
         password: false,
       }));
-      console.log("Password is too short!");
       return false;
-    } else if (stringContainsNumberSymbols(password)) {
+    } else if (!stringContainsNumberSymbols(password)) {
       setIsError((prevState) => ({
+        ...prevState,
+        password: true,
+        passwordMsg: "Password must contain at least one number and symbol",
+      }));
+      setIsSuccess((prevState) => ({
         ...prevState,
         password: false,
       }));
+      return false;
+    } else {
       setIsSuccess((prevState) => ({
         ...prevState,
         password: true,
+        passwordMsg: "",
       }));
-      console.log("Success!");
       return true;
     }
   };
@@ -103,8 +125,8 @@ const SignIn = ({ navigation }) => {
       setIsError((prevState) => ({
         ...prevState,
         email: false,
+        emailMsg: "",
       }));
-      console.log("Success");
       return true;
     } else {
       setIsSuccess((prevState) => ({
@@ -114,8 +136,8 @@ const SignIn = ({ navigation }) => {
       setIsError((prevState) => ({
         ...prevState,
         email: true,
+        emailMsg: "Please check your email address",
       }));
-      console.log("Incorrect email");
       return false;
     }
   };
@@ -147,7 +169,7 @@ const SignIn = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
-        <Text style={styles.title}>Sign In</Text>
+        <Text style={styles.title}>Sign In.</Text>
         {inputs.map((el, idx) => {
           return (
             <CutomInput
@@ -159,6 +181,7 @@ const SignIn = ({ navigation }) => {
               iconName={el.iconName}
               isError={error[`${el.name}`]}
               isSuccess={success[`${el.name}`]}
+              errorMessage={error[`${el.name}Msg`]}
             />
           );
         })}

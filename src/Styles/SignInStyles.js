@@ -10,13 +10,13 @@ export default StyleSheet.create({
   },
   contentContainer: {
     width: "100%",
-    height: "55%",
+    height: "57%",
     padding: sizes.sm,
     justifyContent: "space-around",
     alignItems: "center",
   },
   title: {
-    fontSize: sizes.lg,
+    fontSize: sizes.md,
     paddingBottom: sizes.sm,
     fontFamily: "RobotoLight",
   },

@@ -4,7 +4,7 @@ import { colors, sizes } from "../Theme/index";
 export default StyleSheet.create({
   container: {
     width: "100%",
-    height: 55,
+    height: sizes.xl,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -32,7 +32,7 @@ export default StyleSheet.create({
       height: 0,
     },
     shadowOpacity: 1,
-    shadowRadius: 3,
+    shadowRadius: 2,
   },
   errorIcon: {
     color: colors.error,
@@ -44,9 +44,19 @@ export default StyleSheet.create({
       height: 0,
     },
     shadowOpacity: 1,
-    shadowRadius: 3,
+    shadowRadius: 2,
   },
   successIcon: {
     color: colors.success,
+  },
+  errorMessage: {
+    color: colors.error,
+    paddingLeft: 10,
+    paddingTop: 3,
+    fontFamily: "RobotoLight",
+    opacity: 0,
+  },
+  showErrorMessage: {
+    opacity: 1,
   },
 });

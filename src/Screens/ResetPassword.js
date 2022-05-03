@@ -9,6 +9,7 @@ import { fetchRequest } from "../../utils/utils";
 const ResetPassword = ({ navigation }) => {
   const [error, setIsError] = useState({
     email: false,
+    emailMsg: "",
   });
   const [success, setIsSuccess] = useState({
     email: false,
@@ -17,7 +18,18 @@ const ResetPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const validateEmail = (email) => {
     let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
-    if (regex.test(email)) {
+    if (email.length < 1) {
+      setIsError((prevState) => ({
+        ...prevState,
+        email: true,
+        emailMsg: "Email is required",
+      }));
+      setIsSuccess((prevState) => ({
+        ...prevState,
+        email: false,
+      }));
+      return false;
+    } else if (regex.test(email)) {
       setIsSuccess((prevState) => ({
         ...prevState,
         email: true,
@@ -26,7 +38,6 @@ const ResetPassword = ({ navigation }) => {
         ...prevState,
         email: false,
       }));
-      // console.log("Correct email pattern");
       return true;
     } else {
       setIsSuccess((prevState) => ({
@@ -36,8 +47,8 @@ const ResetPassword = ({ navigation }) => {
       setIsError((prevState) => ({
         ...prevState,
         email: true,
+        emailMsg: "Please check your email address",
       }));
-      // console.log("Incorrect email");
       return false;
     }
   };
@@ -83,6 +94,7 @@ const ResetPassword = ({ navigation }) => {
           handleChangeText={handleChangeText}
           isError={error["email"]}
           isSuccess={success["email"]}
+          errorMessage={error["emailMsg"]}
         />
         <CustomButton
           btnName={"Reset You Password"}

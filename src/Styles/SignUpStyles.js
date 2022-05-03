@@ -16,8 +16,8 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: sizes.lg,
-    paddingBottom: sizes.sm,
+    fontSize: sizes.md,
+    paddingBottom: sizes.sm / 2,
     fontFamily: "RobotoLight",
   },
   textContainer: {

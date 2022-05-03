@@ -11,13 +11,19 @@ const jwt = require("jsonwebtoken");
 router.post("/signIn", async (req, res) => {
   const { email, password } = req.body;
   const result = await collection.findOne({ email });
+  console.log(result);
   if (result) {
     if (bcrypt.compareSync(password, result.password)) {
       const user = {
         email,
       };
-      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-      res.status(201).send({ msg: "Successfully loged In", accessToken });
+      const userName = result.name;
+      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "1m",
+      });
+      res
+        .status(201)
+        .send({ msg: "Successfully loged In", accessToken, email, userName });
     } else {
       res.status(400).send({ msg: "Password incorrect!" });
     }

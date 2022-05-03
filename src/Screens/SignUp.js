@@ -16,23 +16,24 @@ const SignUp = ({ navigation }) => {
     name: "",
     email: "",
     password: "",
+    confirmedPassword: "",
   });
-
   const [error, setIsError] = useState({
     name: false,
+    nameMsg: "",
     email: false,
+    emailMsg: "",
     password: false,
+    passwordMsg: "",
   });
   const [success, setIsSuccess] = useState({
     name: false,
     email: false,
     password: false,
   });
-
   const handleSignInPress = () => {
     navigation.navigate("SignIn");
   };
-
   const handleChangeText = (txt, name) => {
     setIsError((prevState) => ({
       ...prevState,
@@ -47,51 +48,49 @@ const SignUp = ({ navigation }) => {
       [name]: txt,
     });
   };
-
   const validateName = (name) => {
     if (name.length < 3) {
       setIsError((prevState) => ({
         ...prevState,
         name: true,
+        nameMsg: "Name must be at least 3 characters",
       }));
       setIsSuccess((prevState) => ({
         ...prevState,
         name: false,
       }));
-      // console.log("Name can't be shorter than 3 characters!");
       return false;
     } else if (stringContainsNumberSymbols(name)) {
       setIsError((prevState) => ({
         ...prevState,
         name: true,
+        nameMsg: "Name must not contain numbers or symbols",
       }));
       setIsSuccess((prevState) => ({
         ...prevState,
         name: false,
       }));
-      // console.log("Name can't contain numbers or symbols!");
       return false;
     } else {
       setIsSuccess((prevState) => ({
         ...prevState,
         name: true,
+        nameMsg: "",
       }));
-      // console.log("Correct name pattern");
       return true;
     }
   };
-
   const validatePassword = (password) => {
     if (password.length < 6) {
       setIsError((prevState) => ({
         ...prevState,
         password: true,
+        passwordMsg: "Password must be at least 6 characters long",
       }));
       setIsSuccess((prevState) => ({
         ...prevState,
         password: false,
       }));
-      // console.log("Password is too short!");
       return false;
     } else if (stringContainsNumberSymbols(password)) {
       setIsError((prevState) => ({
@@ -102,13 +101,43 @@ const SignUp = ({ navigation }) => {
         ...prevState,
         password: true,
       }));
-      // console.log("Correct password pattern!");
       return true;
     }
   };
-
+  const validateEquality = (password, confirmPassword) => {
+    if (password === confirmPassword) {
+      setIsSuccess((prevState) => ({
+        ...prevState,
+        password: true,
+      }));
+      return true;
+    } else {
+      setIsError((prevState) => ({
+        ...prevState,
+        password: true,
+        passwordMsg: "Passwords do not match",
+      }));
+      setIsSuccess((prevState) => ({
+        ...prevState,
+        password: false,
+      }));
+      return false;
+    }
+  };
   const validateEmail = (email) => {
     let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+    if (email.length < 1) {
+      setIsError((prevState) => ({
+        ...prevState,
+        email: true,
+        emailMsg: "Email must not be empty",
+      }));
+      setIsSuccess((prevState) => ({
+        ...prevState,
+        email: false,
+      }));
+      return false;
+    }
     if (regex.test(email)) {
       setIsSuccess((prevState) => ({
         ...prevState,
@@ -118,7 +147,6 @@ const SignUp = ({ navigation }) => {
         ...prevState,
         email: false,
       }));
-      // console.log("Correct email pattern");
       return true;
     } else {
       setIsSuccess((prevState) => ({
@@ -128,24 +156,23 @@ const SignUp = ({ navigation }) => {
       setIsError((prevState) => ({
         ...prevState,
         email: true,
+        emailMsg: "Please enter a valid email address",
       }));
-      // console.log("Incorrect email");
       return false;
     }
   };
-
   const validateSignUpData = (signUpData) => {
     if (
       validateName(signUpData.name) &&
       validateEmail(signUpData.email) &&
-      validatePassword(signUpData.password)
+      validatePassword(signUpData.password) &&
+      validateEquality(signUpData.password, signUpData.confirmedPassword)
     ) {
       return true;
     } else {
       return false;
     }
   };
-
   const handleButtonPress = () => {
     if (validateSignUpData(signUpData)) {
       fetchRequest("http://192.168.0.104:3000/findOne", signUpData)
@@ -195,12 +222,18 @@ const SignUp = ({ navigation }) => {
       iconName: "lock",
       isSecured: true,
     },
+    {
+      placeholder: "Verify Password",
+      name: "confirmedPassword",
+      iconName: "lock",
+      isSecured: true,
+    },
   ];
 
   return (
     <KeyboardAvoidingView
       behavior="padding"
-      keyboardVerticalOffset={-120}
+      keyboardVerticalOffset={-30}
       style={styles.container}
     >
       <View style={styles.contentContainer}>
@@ -216,6 +249,7 @@ const SignUp = ({ navigation }) => {
               isError={error[`${el.name}`]}
               isSuccess={success[`${el.name}`]}
               isSecured={el.isSecured}
+              errorMessage={error[`${el.name}Msg`]}
             />
           );
         })}
