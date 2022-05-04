@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef } from "react";
 import { View, Text, TouchableOpacity, Image, Modal } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -52,7 +52,7 @@ const Map = ({ navigation }) => {
 
   useEffect(() => {
     getUserEmailName();
-    const socket = io("http://192.168.0.104:3000");
+    const socket = io("http://192.168.0.105:3000");
     setCurrentSocket(socket);
   }, []);
 

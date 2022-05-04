@@ -175,11 +175,11 @@ const SignUp = ({ navigation }) => {
   };
   const handleButtonPress = () => {
     if (validateSignUpData(signUpData)) {
-      fetchRequest("http://192.168.0.104:3000/findOne", signUpData)
+      fetchRequest("http://192.168.0.105:3000/findOne", signUpData)
         .then((res) => res.json())
         .then((res) => {
           if (res.msg) {
-            fetchRequest("http://192.168.0.104:3000/signUp", signUpData)
+            fetchRequest("http://192.168.0.105:3000/signUp", signUpData)
               .then((res) => {
                 res.text();
               })

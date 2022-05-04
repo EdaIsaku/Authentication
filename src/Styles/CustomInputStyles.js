@@ -25,6 +25,9 @@ export default StyleSheet.create({
     color: "#d3d3d3",
     fontSize: sizes.sm,
   },
+  focus: {
+    color: colors.main,
+  },
   error: {
     shadowColor: colors.error,
     shadowOffset: {
