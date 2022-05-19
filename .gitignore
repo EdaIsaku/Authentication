@@ -12,5 +12,7 @@ npm-debug.*
 web-build/
 backend/.env
 
+/uploads/
+
 # macOS
 .DS_Store

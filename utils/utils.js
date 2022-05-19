@@ -13,4 +13,9 @@ const fetchRequest = (url, data) => {
     body: JSON.stringify(data),
   });
 };
-export { stringContainsNumberSymbols, fetchRequest };
+
+const getExtension = (filename) => {
+  const parts = filename.split(".");
+  return parts[parts.length - 1];
+};
+export { stringContainsNumberSymbols, fetchRequest, getExtension };

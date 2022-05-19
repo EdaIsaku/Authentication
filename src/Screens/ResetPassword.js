@@ -65,7 +65,7 @@ const ResetPassword = ({ navigation }) => {
   };
   const handleButtonPress = () => {
     if (validateEmail(email)) {
-      fetchRequest("http://192.168.0.104:3000/findOne", { email })
+      fetchRequest("http://192.168.1.205:3000/findOne", { email })
         .then((res) => res.json())
         .then((res) => {
           if (res.msg) {

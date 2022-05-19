@@ -12,15 +12,20 @@ const hashPass = (password) => {
 
 router.post("/signUp", async (req, res) => {
   let { name, email, password } = req.body;
-  const hashedPassword = hashPass(password);
-  password = hashedPassword;
-  const user = {
-    name,
-    email,
-    password,
-  };
-  await collection.insertOne(user);
-  res.status(200).send({ msg: "Successfully registered!" });
+  const userExist = await collection.findOne({ email });
+  if (userExist) {
+    res.status(201).send({ msg: "User already exists!" });
+  } else {
+    const hashedPassword = hashPass(password);
+    password = hashedPassword;
+    const user = {
+      name,
+      email,
+      password,
+    };
+    await collection.insertOne(user);
+    res.status(200).send({ msg: "Successfully registered!" });
+  }
 });
 
 module.exports = router;

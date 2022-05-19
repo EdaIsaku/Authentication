@@ -41,7 +41,7 @@ const SignIn = ({ navigation }) => {
       setUser({
         email: signInData.email,
       });
-      fetchRequest(`http://192.168.0.105:3000/signIn`, signInData)
+      fetchRequest("http://192.168.1.205:3000/signIn", signInData)
         .then((res) => res.json())
         .then((res) => {
           if (res.msg == "Successfully loged In") {
